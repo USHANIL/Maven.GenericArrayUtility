@@ -1,9 +1,12 @@
 package com.zipcodewilmington.arrayutility;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
+import java.util.stream.*;
+
 
 /**
  * Created by leon on 3/6/18.
@@ -55,7 +58,8 @@ public class ArrayUtility<T> {
     }
 
     public T[] removeValue(T valueToRemove) {
-        T[] newArray = arrayToBeMerged;
+       /* //below works without using stream
+       T[] newArray = arrayToBeMerged;
         int count =0;
         int j=0;
         for (int i = 0; i < arrayToBeMerged.length; i++) {
@@ -68,8 +72,12 @@ public class ArrayUtility<T> {
             }
         }
         T[] result = Arrays.copyOf(newArray, newArray.length-count);
+        return result; */
 
-        return result;
+        List<T> list = new ArrayList<>();
+        list = Arrays.stream(arrayToBeMerged).filter(t -> !t.equals(valueToRemove)).collect(Collectors.toList());
+        T[] newArray = (T[]) Array.newInstance(arrayToBeMerged.getClass().getComponentType(), list.size());
+        return list.toArray(newArray);
     }
 
     private T[] getMergedArray(T[] arrayToMerge) {
